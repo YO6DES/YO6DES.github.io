@@ -47,6 +47,19 @@
     .answer { border:1px solid var(--line); border-radius:12px; text-align:left; padding:1rem 1.2rem; background:#fff; color:var(--ink); }
     .answer:hover,.answer:focus-visible { outline:3px solid #55c6b1; }
     .feedback { min-height:2rem; font-weight:750; color:var(--accent); }
+    .game-panel { display:grid; gap:1rem; }
+    .game-panel[hidden] { display:none !important; }
+    .game-hud { display:flex; flex-wrap:wrap; justify-content:space-between; gap:.65rem; font-weight:750; }
+    .game-hud span { padding:.55rem .8rem; border-radius:999px; background:#eaf4f0; }
+    .game-progress { height:7px; background:#e2eae5; border-radius:999px; overflow:hidden; }
+    .game-progress span { display:block; height:100%; width:0; background:#55c6b1; transition:width .2s; }
+    .game-question { font-size:clamp(1.2rem,2.6vw,1.65rem); margin:.2rem 0; }
+    .game-option.is-correct { border-color:#55a98e; background:#e2f3eb; }
+    .game-option.is-wrong { border-color:#c66b60; background:#f9e8e5; }
+    .game-feedback { min-height:2.5rem; margin:0; font-weight:750; }
+    .game-review { color:var(--muted); }
+    .game-review ul { padding-left:1.3rem; }
+    .game-review li { margin:.45rem 0; }
     .controls { display:flex; align-items:center; gap:.8rem; margin:1rem 0 0; }
     .control { padding:.65rem 1rem; color:#fff; background:#146b67; }
     .control:disabled { opacity:.45; cursor:not-allowed; }
@@ -69,7 +82,7 @@
       <div class="start" id="start">
         <div class="eyebrow">Prezentare interactivă · 10 slide-uri</div>
         <h2>Joncțiunea p–n</h2>
-        <p>Începe cu butonul Play, apoi parcurge slide-urile. La final, răspunde la mini-quiz.</p>
+        <p>Începe cu butonul Play, apoi parcurge slide-urile. La final, joacă și verifică ce ai învățat.</p>
         <button class="primary" id="play">▶ Play / Începe</button>
       </div>
       <section class="screen" data-title="Joncțiunea p–n"><div class="eyebrow">Semiconductori</div><h2>Joncțiunea p–n</h2><p class="lead">Cum se formează și cum controlează curentul electric</p><div class="junction"><span class="p">P<br>găuri</span><span class="dep">interfață</span><span class="n">N<br>electroni</span></div><p class="callout">O interfață între două regiuni dopate stă la baza diodei semiconductoare.</p></section>
@@ -81,21 +94,161 @@
       <section class="screen" data-title="Caracteristica diodei"><h2>Dioda conduce diferit în cele două sensuri</h2><div class="split"><div class="material n"><h3>Polarizare directă</h3><p>După depășirea barierei, curentul crește rapid odată cu tensiunea.</p></div><div class="material"><h3>Polarizare inversă</h3><p>Curge doar un curent mic de fugă, până la regiunea de străpungere.</p></div></div><p class="callout">Caracteristica I–V este asimetrică. Valoarea exactă depinde de tipul diodei și de condițiile de funcționare.</p></section>
       <section class="screen" data-title="Fabricație și aplicații"><h2>Joncțiunea stă la baza mai multor componente</h2><ul><li><b>Realizare:</b> difuzie, implantare ionică sau epitaxie.</li><li><b>Redresare:</b> diodele permit curentul în regim direct.</li><li><b>Lumină:</b> LED-urile emit lumină, iar fotodiodele detectează lumina.</li></ul><p class="callout">Dopajul și geometria joncțiunii determină comportarea dispozitivului.</p></section>
       <section class="screen" data-title="Clip video"><h2>Urmărește animația</h2><p class="lead">Clipul arată formarea joncțiunii și zona de epuizare. Audio este în engleză.</p><div class="video-wrap"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/btOIDQeMrMg?rel=0" title="How does a diode work - the PN Junction (with animation)" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div><p class="help">Dacă playerul nu se încarcă, <a href="https://www.youtube.com/watch?v=btOIDQeMrMg" target="_blank" rel="noopener">deschide clipul pe YouTube</a>.</p></section>
-      <section class="screen" data-title="Mini-quiz"><h2>Mini-quiz: polarizarea directă</h2><p class="lead">Cum conectăm sursa ca dioda să conducă în regim direct?</p><div class="quiz"><button class="answer" data-correct="false">A. P la minus și N la plus</button><button class="answer" data-correct="true">B. P la plus și N la minus</button><button class="answer" data-correct="false">C. Ambele regiuni la plus</button></div><p class="feedback" id="feedback" role="status"></p><p class="help">Răspunsul se verifică imediat. Poți reveni la explicațiile despre polarizare cu butonul Înapoi.</p><a class="download" href="/assets/jonctiunea_p-n.pptx" download>Descarcă prezentarea PowerPoint (.pptx)</a></section>
+      <section class="screen" data-title="Joc cu întrebări">
+        <div class="eyebrow">Joc de recapitulare · pe baza PowerPoint-ului</div>
+        <h2>Provocarea joncțiunii p–n</h2>
+        <p class="lead">10 întrebări despre ideile din prezentare. Ai 3 vieți; fiecare răspuns corect valorează 10 puncte. La un răspuns greșit pierzi o viață și primești explicația.</p>
+        <div class="game-panel" id="gameIntro">
+          <p>Răspunde la întrebări despre purtătorii de sarcină, zona de epuizare, polarizarea diodei și dispozitivele care folosesc joncțiuni p–n.</p>
+          <button class="primary" type="button" id="gameStart">▶ Începe jocul</button>
+        </div>
+        <div class="game-panel" id="gamePlay" hidden>
+          <div class="game-hud"><span id="gameCount">Întrebarea 1 din 10</span><span id="gameScore">Scor: 0</span><span id="gameLives">Vieți: ♥♥♥</span></div>
+          <div class="game-progress" aria-hidden="true"><span id="gameProgress"></span></div>
+          <h3 class="game-question" id="gameQuestion"></h3>
+          <div class="quiz" id="gameAnswers"></div>
+          <p class="game-feedback" id="gameFeedback" role="status" aria-live="polite"></p>
+          <button class="control" type="button" id="gameContinue" disabled>Alege un răspuns</button>
+        </div>
+        <div class="game-panel" id="gameEnd" hidden aria-live="polite">
+          <h3 id="gameResult">Joc terminat</h3>
+          <p class="lead" id="gameSummary"></p>
+          <div class="game-review" id="gameReview"></div>
+          <button class="primary" type="button" id="gameRestart">Joacă din nou</button>
+          <a class="download" href="/assets/jonctiunea_p-n.pptx" download>Descarcă prezentarea PowerPoint (.pptx)</a>
+        </div>
+      </section>
     </div>
     <nav class="controls" aria-label="Navigare prezentare"><button class="control" id="prev" disabled>← Înapoi</button><button class="control" id="next" disabled>Înainte →</button><span class="counter" id="counter">Apasă Play ca să începi</span></nav>
-    <p class="help">Comenzi rapide: ← și → pentru navigare, Home pentru primul slide, End pentru quiz.</p>
+    <p class="help">Comenzi rapide: ← și → pentru navigare, Home pentru primul slide, End pentru joc.</p>
   </main>
   <script>
     const pages=[...document.querySelectorAll('.screen')], start=document.getElementById('start');
     const prev=document.getElementById('prev'), next=document.getElementById('next'), counter=document.getElementById('counter'), progress=document.getElementById('progress');
-    let index=0, started=false;
-    function show(n){ index=Math.max(0,Math.min(pages.length-1,n)); pages.forEach((p,i)=>p.classList.toggle('active',i===index)); counter.textContent=`${index+1} / ${pages.length} · ${pages[index].dataset.title}`; prev.disabled=index===0; next.disabled=index===pages.length-1; progress.style.width=`${(index+1)/pages.length*100}%`; }
-    function begin(){started=true; start.hidden=true; show(0);}
+    const gameIntro=document.getElementById('gameIntro'), gamePlay=document.getElementById('gamePlay'), gameEnd=document.getElementById('gameEnd');
+    const gameCount=document.getElementById('gameCount'), gameScore=document.getElementById('gameScore'), gameLives=document.getElementById('gameLives');
+    const gameProgress=document.getElementById('gameProgress'), gameQuestion=document.getElementById('gameQuestion'), gameAnswers=document.getElementById('gameAnswers');
+    const gameFeedback=document.getElementById('gameFeedback'), gameContinue=document.getElementById('gameContinue'), gameReview=document.getElementById('gameReview');
+    const questions=[
+      {prompt:"În materialul de tip p, care sunt purtătorii majoritari?",options:["Găurile","Electronii","Ionii donori"],answer:0,why:"În tipul p, găurile sunt purtătorii majoritari."},
+      {prompt:"Ce se întâmplă cu electronii și găurile care ajung în regiunea opusă?",options:["Se recombină","Devind ioni mobili","Rămân prinși ca purtători mobili"],answer:0,why:"Electronii și găurile se recombină lângă interfață."},
+      {prompt:"Ce rămâne în apropierea interfeței după recombinarea inițială?",options:["Ioni fixați și puțini purtători mobili","Mai mulți electroni mobili","Un al doilea strat de metal"],answer:0,why:"Așa se formează zona de epuizare, cu sarcini fixe."},
+      {prompt:"În ce direcție acționează câmpul electric intern al joncțiunii?",options:["Se opune difuziei suplimentare","Accelerează difuzia fără oprire","Elimină doparea"],answer:0,why:"Câmpul intern contribuie la echilibrul joncțiunii."},
+      {prompt:"Cum conectezi dioda pentru polarizare directă?",options:["P la plus, N la minus","P la minus, N la plus","Ambele regiuni la plus"],answer:0,why:"Polarizarea directă îngustează zona de epuizare și favorizează curentul."},
+      {prompt:"Ce efect are polarizarea directă asupra zonei de epuizare?",options:["O îngustează","O lărgește","Nu o schimbă"],answer:0,why:"Bariera scade, iar curentul poate crește mult."},
+      {prompt:"Cum conectezi dioda pentru polarizare inversă?",options:["P la minus, N la plus","P la plus, N la minus","Ambele regiuni la minus"],answer:0,why:"Polarizarea inversă lărgește zona de epuizare."},
+      {prompt:"Cum se comportă curentul invers înainte de străpungere?",options:["Rămâne foarte mic","Crește rapid","Este întotdeauna mai mare decât curentul direct"],answer:0,why:"Înainte de străpungere există doar un curent invers foarte mic."},
+      {prompt:"Care sunt metodele de realizare prezentate pentru joncțiunea p–n?",options:["Difuzie, implantare ionică și epitaxie","Turnare, sudură și imprimare","Doar răcire și încălzire"],answer:0,why:"Aceste trei metode introduc sau controlează dopanții în semiconductor."},
+      {prompt:"Ce dispozitive folosesc joncțiuni p–n?",options:["Diode de redresare, LED-uri și fotodiode","Condensatoare și transformatoare בלבד","Doar rezistoare"],answer:0,why:"Prezentarea enumeră diode de redresare, LED-uri și fotodiode."}
+    ];
+    let index=0, started=false, gameIndex=0, score=0, lives=3, correctCount=0, missed=[], answered=false, gameActive=false;
+    function show(n){
+      index=Math.max(0,Math.min(pages.length-1,n));
+      pages.forEach((p,i)=>p.classList.toggle('active',i===index));
+      counter.textContent=(index+1)+' / '+pages.length+' · '+pages[index].dataset.title;
+      prev.disabled=index===0||gameActive;
+      next.disabled=index===pages.length-1||gameActive;
+      progress.style.width=((index+1)/pages.length*100)+'%';
+    }
+    function begin(){started=true;start.hidden=true;show(0);}
     document.getElementById('play').addEventListener('click',begin);
-    prev.addEventListener('click',()=>show(index-1)); next.addEventListener('click',()=>show(index+1));
-    document.addEventListener('keydown',e=>{if(!started)return;if(e.key==='ArrowRight')show(index+1);if(e.key==='ArrowLeft')show(index-1);if(e.key==='Home')show(0);if(e.key==='End')show(pages.length-1);});
-    document.querySelectorAll('.answer').forEach(b=>b.addEventListener('click',()=>{const ok=b.dataset.correct==='true';document.getElementById('feedback').textContent=ok?'Corect! În polarizare directă, P se conectează la plus, iar N la minus.':'Încearcă din nou. Pentru polarizare directă, P se conectează la plus, iar N la minus.';document.getElementById('feedback').style.color=ok?'#146b67':'#9b3c32';}));
+    prev.addEventListener('click',()=>show(index-1));
+    next.addEventListener('click',()=>show(index+1));
+    document.addEventListener('keydown',e=>{
+      if(!started||gameActive)return;
+      if(e.key==='ArrowRight')show(index+1);
+      if(e.key==='ArrowLeft')show(index-1);
+      if(e.key==='Home')show(0);
+      if(e.key==='End')show(pages.length-1);
+    });
+    function updateGameHud(){
+      gameCount.textContent='Întrebarea '+(gameIndex+1)+' din '+questions.length;
+      gameScore.textContent='Scor: '+score;
+      gameLives.textContent='Vieți: '+'♥'.repeat(lives)+'♡'.repeat(3-lives);
+      gameProgress.style.width=(gameIndex/questions.length*100)+'%';
+    }
+    function renderQuestion(){
+      if(gameLives===0||gameIndex>=questions.length){finishGame();return;}
+      answered=false;
+      const q=questions[gameIndex];
+      updateGameHud();
+      gameQuestion.textContent=q.prompt;
+      gameAnswers.replaceChildren();
+      gameFeedback.textContent='';
+      gameContinue.textContent='Alege un răspuns';
+      gameContinue.disabled=true;
+      q.options.forEach((option,i)=>{
+        const button=document.createElement('button');
+        button.type='button';
+        button.className='answer game-option';
+        button.textContent=String.fromCharCode(65+i)+'. '+option;
+        button.addEventListener('click',()=>answerQuestion(i,button));
+        gameAnswers.appendChild(button);
+      });
+    }
+    function answerQuestion(choice,selected){
+      if(answered||!gameActive)return;
+      answered=true;
+      const q=questions[gameIndex];
+      const buttons=[...gameAnswers.querySelectorAll('button')];
+      buttons.forEach(button=>button.disabled=true);
+      if(choice===q.answer){
+        score+=10;
+        correctCount++;
+        selected.classList.add('is-correct');
+        gameFeedback.style.color='#146b67';
+        gameFeedback.textContent='Corect! +10 puncte. '+q.why;
+      }else{
+        lives=Math.max(0,lives-1);
+        missed.push({question:q.prompt,answer:q.options[q.answer]});
+        selected.classList.add('is-wrong');
+        buttons[q.answer].classList.add('is-correct');
+        gameFeedback.style.color='#9b3c32';
+        gameFeedback.textContent='Răspuns greșit: '+q.options[q.answer]+'. '+q.why+' Ai pierdut o viață.';
+      }
+      updateGameHud();
+      gameProgress.style.width=((gameIndex+1)/questions.length*100)+'%';
+      gameContinue.textContent=(lives===0||gameIndex===questions.length-1)?'Vezi rezultatul':'Continuă';
+      gameContinue.disabled=false;
+    }
+    function finishGame(){
+      gameActive=false;
+      gamePlay.hidden=true;
+      gameEnd.hidden=false;
+      gameProgress.style.width='100%';
+      gameResult.textContent=score===100?'Excelent! Ai câștigat jocul!':score>=70?'Foarte bine! Joc terminat.':'Joc terminat!';
+      gameSummary.textContent='Scor: '+score+' din '+(questions.length*10)+' puncte · '+correctCount+' din '+questions.length+' corecte · '+lives+' vieți rămase.';
+      gameReview.replaceChildren();
+      if(missed.length){
+        const heading=document.createElement('p');
+        heading.textContent='Răspunsuri de revăzut:';
+        const list=document.createElement('ul');
+        missed.forEach(item=>{
+          const li=document.createElement('li');
+          li.textContent=item.question+' Răspuns corect: '+item.answer+'.';
+          list.appendChild(li);
+        });
+        gameReview.append(heading,list);
+      }else{
+        gameReview.textContent='Ai răspuns corect la toate întrebările!';
+      }
+      prev.disabled=index===0;
+      next.disabled=index===pages.length-1;
+    }
+    function startGame(){
+      gameIndex=0;score=0;lives=3;correctCount=0;missed=[];gameActive=true;
+      gameIntro.hidden=true;gameEnd.hidden=true;gamePlay.hidden=false;
+      prev.disabled=true;next.disabled=true;
+      renderQuestion();
+    }
+    function continueGame(){
+      if(!answered)return;
+      gameIndex++;
+      renderQuestion();
+    }
+    document.getElementById('gameStart').addEventListener('click',startGame);
+    document.getElementById('gameRestart').addEventListener('click',startGame);
+    gameContinue.addEventListener('click',continueGame);
   </script>
 </body>
 </html>
