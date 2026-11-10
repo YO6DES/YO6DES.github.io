@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Joacă un quiz cu întrebări despre joncțiunea p–n.">
+  <title>Joc: Joncțiunea p–n · School projects</title>
+  <style>
+    :root { color-scheme: light; --ink:#172c3d; --muted:#617386; --accent:#146b67; --paper:#f5f7f3; --line:#dce5df; --mint:#55c6b1; --red:#a34239; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; line-height:1.55; }
+    header { display:flex; justify-content:space-between; align-items:center; padding:1rem max(6vw,1.2rem); border-bottom:1px solid var(--line); }
+    a { color:var(--accent); }
+    .brand { color:var(--ink); text-decoration:none; font-weight:800; letter-spacing:-.03em; }
+    main { width:min(900px,90vw); margin:0 auto; padding:2.5rem 0 3.5rem; }
+    .eyebrow { color:var(--accent); text-transform:uppercase; letter-spacing:.14em; font-size:.75rem; font-weight:800; }
+    h1 { margin:.5rem 0 .7rem; font-size:clamp(2rem,6vw,3.6rem); line-height:1.03; letter-spacing:-.055em; }
+    .lead { color:var(--muted); max-width:700px; margin:0 0 1.5rem; }
+    .card { padding:clamp(1.3rem,4vw,2.5rem); border:1px solid var(--line); border-radius:22px; background:white; box-shadow:0 18px 55px #163b2b12; }
+    .rules { display:flex; flex-wrap:wrap; gap:.7rem; padding:0; margin:1.2rem 0 1.6rem; list-style:none; }
+    .rules li,.hud span { padding:.55rem .8rem; border-radius:999px; background:#eaf4f0; font-weight:750; }
+    button { font:inherit; cursor:pointer; }
+    .primary,.answer,.secondary { border:0; border-radius:12px; font-weight:750; }
+    .primary { padding:.85rem 1.2rem; background:var(--accent); color:white; }
+    .primary:hover { background:#0e5753; }
+    .hud { display:flex; flex-wrap:wrap; justify-content:space-between; gap:.6rem; font-size:.95rem; }
+    .track { height:8px; margin:1.1rem 0 1.4rem; overflow:hidden; border-radius:999px; background:#e2eae5; }
+    .track span { display:block; width:0; height:100%; background:var(--mint); transition:width .2s; }
+    h2 { font-size:clamp(1.25rem,3vw,1.7rem); line-height:1.25; margin:0 0 1rem; }
+    .answers { display:grid; gap:.7rem; }
+    .answer { padding:.95rem 1.1rem; border:1px solid var(--line); background:#fff; color:var(--ink); text-align:left; }
+    .answer:hover:not(:disabled),.answer:focus-visible { outline:3px solid var(--mint); }
+    .answer:disabled { cursor:default; opacity:1; }
+    .answer.correct { background:#e2f3eb; border-color:#55a98e; }
+    .answer.wrong { background:#f9e8e5; border-color:#c66b60; }
+    .feedback { min-height:3rem; margin:1rem 0 .5rem; font-weight:750; }
+    .secondary { padding:.7rem 1rem; background:#146b67; color:white; }
+    .secondary:disabled { opacity:.45; cursor:not-allowed; }
+    .review { color:var(--muted); }
+    .review li { margin:.5rem 0; }
+    .links { display:flex; flex-wrap:wrap; gap:1rem; margin-top:1.4rem; }
+    [hidden] { display:none !important; }
+    @media(max-width:560px) { header { padding-inline:5vw; } .hud { justify-content:flex-start; } .hud span { font-size:.85rem; } }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="brand" href="/#school-projects">DENIS<span style="color:#df8c4a">.</span></a>
+    <a href="/school-projects/">← Vezi prezentarea</a>
+  </header>
+  <main>
+    <div class="eyebrow">Joc cu întrebări · Electronică</div>
+    <h1>Provocarea joncțiunii p–n</h1>
+    <p class="lead">Răspunde la întrebări despre ideile din prezentare: purtătorii de sarcină, zona de epuizare, polarizarea diodei și aplicații.</p>
+    <section class="card" aria-live="polite">
+      <div id="intro">
+        <h2>Gata de joc?</h2>
+        <p>Ai 10 întrebări și 3 vieți. Fiecare răspuns corect valorează 10 puncte. La răspunsurile greșite pierzi o viață și primești o explicație.</p>
+        <ul class="rules"><li>10 întrebări</li><li>3 vieți ♥♥♥</li><li>10 puncte / răspuns corect</li></ul>
+        <button class="primary" id="start" type="button">▶ Începe jocul</button>
+      </div>
+      <div id="play" hidden>
+        <div class="hud"><span id="count">Întrebarea 1 din 10</span><span id="score">Scor: 0</span><span id="lives">Vieți: ♥♥♥</span></div>
+        <div class="track" aria-hidden="true"><span id="progress"></span></div>
+        <h2 id="question"></h2>
+        <div class="answers" id="answers"></div>
+        <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
+        <button class="secondary" id="continue" type="button" disabled>Alege un răspuns</button>
+      </div>
+      <div id="result" hidden>
+        <div class="eyebrow">Rezultatul tău</div>
+        <h2 id="resultTitle">Joc terminat</h2>
+        <p id="summary"></p>
+        <div class="review" id="review"></div>
+        <button class="primary" id="restart" type="button">Joacă din nou</button>
+      </div>
+    </section>
+    <nav class="links" aria-label="Materiale despre joncțiunea p–n">
+      <a href="/school-projects/">Vezi prezentarea interactivă</a>
+      <a href="/assets/jonctiunea_p-n.pptx" download>Descarcă PowerPoint (.pptx)</a>
+    </nav>
+  </main>
+  <script>
+    const questions = [
+      { q:"În materialul de tip p, care sunt purtătorii majoritari?", choices:["Găurile","Electronii","Ionii donori"], answer:"Găurile", why:"În tipul p, găurile sunt purtătorii majoritari." },
+      { q:"Ce se întâmplă cu electronii și găurile care ajung în regiunea opusă?", choices:["Se recombină","Devin ioni mobili","Rămân purtători mobili"], answer:"Se recombină", why:"Electronii și găurile se recombină lângă interfață." },
+      { q:"Ce se găsește în zona de epuizare după recombinarea inițială?", choices:["Ioni fixați și puțini purtători mobili","Mai mulți electroni mobili","Un strat de metal"], answer:"Ioni fixați și puțini purtători mobili", why:"Zona de epuizare conține sarcini fixe și foarte puțini purtători mobili." },
+      { q:"În ce direcție acționează câmpul electric intern?", choices:["Se opune difuziei suplimentare","Accelerează difuzia fără oprire","Elimină doparea"], answer:"Se opune difuziei suplimentare", why:"Câmpul electric intern se opune difuziei și ajută joncțiunea să ajungă la echilibru." },
+      { q:"Cum conectezi dioda pentru polarizare directă?", choices:["P la plus, N la minus","P la minus, N la plus","Ambele regiuni la plus"], answer:"P la plus, N la minus", why:"Polarizarea directă micșorează bariera și favorizează curentul." },
+      { q:"Ce efect are polarizarea directă asupra zonei de epuizare?", choices:["O îngustează","O lărgește","Nu o schimbă"], answer:"O îngustează", why:"Când bariera devine mai mică, purtătorii pot trece mai ușor prin joncțiune." },
+      { q:"Cum conectezi dioda pentru polarizare inversă?", choices:["P la minus, N la plus","P la plus, N la minus","Ambele regiuni la minus"], answer:"P la minus, N la plus", why:"Polarizarea inversă lărgește zona de epuizare." },
+      { q:"Cum este curentul invers înainte de străpungere?", choices:["Foarte mic","Crește rapid","Mai mare decât cel direct"], answer:"Foarte mic", why:"Înainte de străpungere există doar un curent invers mic." },
+      { q:"Care sunt metodele de realizare prezentate pentru joncțiunea p–n?", choices:["Difuzie, implantare ionică și epitaxie","Turnare, sudură și imprimare","Doar răcire și încălzire"], answer:"Difuzie, implantare ionică și epitaxie", why:"Aceste metode introduc sau controlează dopanții în semiconductor." },
+      { q:"Ce dispozitive folosesc joncțiuni p–n?", choices:["Diode de redresare, LED-uri și fotodiode","Condensatoare și transformatoare","Doar rezistoare"], answer:"Diode de redresare, LED-uri și fotodiode", why:"Diodele de redresare, LED-urile și fotodiodele folosesc joncțiuni semiconductoare." }
+    ];
+    const intro=document.getElementById("intro"), play=document.getElementById("play"), result=document.getElementById("result");
+    const countEl=document.getElementById("count"), scoreEl=document.getElementById("score"), livesEl=document.getElementById("lives");
+    const progressEl=document.getElementById("progress"), questionEl=document.getElementById("question"), answersEl=document.getElementById("answers");
+    const feedbackEl=document.getElementById("feedback"), continueEl=document.getElementById("continue"), reviewEl=document.getElementById("review");
+    let index=0, score=0, lives=3, correct=0, missed=[], locked=false, currentChoices=[];
+    function shuffle(items){
+      for(let i=items.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[items[i],items[j]]=[items[j],items[i]];}
+      return items;
+    }
+    function updateHud(){
+      countEl.textContent="Întrebarea "+(index+1)+" din "+questions.length;
+      scoreEl.textContent="Scor: "+score;
+      livesEl.textContent="Vieți: "+"♥".repeat(lives)+"♡".repeat(3-lives);
+    }
+    function renderQuestion(){
+      if(index>=questions.length||lives===0){finish();return;}
+      locked=false;
+      const item=questions[index];
+      currentChoices=shuffle([...item.choices]);
+      updateHud();
+      progressEl.style.width=(index/questions.length*100)+"%";
+      questionEl.textContent=item.q;
+      feedbackEl.textContent="";
+      feedbackEl.style.color="";
+      continueEl.disabled=true;
+      continueEl.textContent="Alege un răspuns";
+      answersEl.replaceChildren();
+      currentChoices.forEach((choice,i)=>{
+        const button=document.createElement("button");
+        button.type="button";
+        button.className="answer";
+        button.textContent=String.fromCharCode(65+i)+". "+choice;
+        button.addEventListener("click",()=>answer(choice,button));
+        answersEl.append(button);
+      });
+    }
+    function answer(choice,selected){
+      if(locked)return;
+      locked=true;
+      const item=questions[index];
+      const buttons=[...answersEl.querySelectorAll("button")];
+      buttons.forEach(button=>button.disabled=true);
+      if(choice===item.answer){
+        score+=10;
+        correct++;
+        selected.classList.add("correct");
+        feedbackEl.style.color="#146b67";
+        feedbackEl.textContent="Corect! +10 puncte. "+item.why;
+      }else{
+        lives--;
+        missed.push({q:item.q,a:item.answer});
+        selected.classList.add("wrong");
+        const correctButton=buttons.find(button=>button.textContent.endsWith(item.answer));
+        if(correctButton)correctButton.classList.add("correct");
+        feedbackEl.style.color="#a34239";
+        feedbackEl.textContent="Răspuns greșit. Răspunsul corect: "+item.answer+". "+item.why+" Ai pierdut o viață.";
+      }
+      updateHud();
+      progressEl.style.width=((index+1)/questions.length*100)+"%";
+      continueEl.textContent=(lives===0||index===questions.length-1)?"Vezi rezultatul":"Continuă";
+      continueEl.disabled=false;
+    }
+    function finish(){
+      play.hidden=true;
+      result.hidden=false;
+      progressEl.style.width=(index/questions.length*100)+"%";
+      resultTitle.textContent=score===100?"Excelent! Ai câștigat!":score>=70?"Foarte bine!":"Joc terminat";
+      summary.textContent="Scor: "+score+" din 100 · răspunsuri corecte: "+correct+" din "+questions.length+" · vieți rămase: "+lives+".";
+      reviewEl.replaceChildren();
+      if(missed.length){
+        const heading=document.createElement("p");
+        heading.textContent="Întrebări de revăzut:";
+        const list=document.createElement("ul");
+        missed.forEach(item=>{
+          const li=document.createElement("li");
+          li.textContent=item.q+" Răspuns corect: "+item.a+".";
+          list.append(li);
+        });
+        reviewEl.append(heading,list);
+      }else{
+        reviewEl.textContent="Ai răspuns corect la toate întrebările!";
+      }
+    }
+    function begin(){
+      index=0;score=0;lives=3;correct=0;missed=[];locked=false;
+      intro.hidden=true;result.hidden=true;play.hidden=false;
+      renderQuestion();
+    }
+    document.getElementById("start").addEventListener("click",begin);
+    document.getElementById("restart").addEventListener("click",begin);
+    continueEl.addEventListener("click",()=>{
+      if(!locked)return;
+      index++;
+      renderQuestion();
+    });
+  </script>
+</body>
+</html>

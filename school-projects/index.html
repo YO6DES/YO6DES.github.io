@@ -67,6 +67,8 @@
     .progress { height:5px; background:#e2eae5; }
     .progress span { display:block; height:100%; width:0; background:#55c6b1; transition:width .2s; }
     .download { display:inline-block; margin-top:1rem; font-weight:750; }
+    .resource-links { display:flex; gap:.8rem; align-items:center; flex-wrap:wrap; margin:-.75rem 0 1rem; }
+    .resource-links .download { margin:0; }
     .help { font-size:.9rem; color:var(--muted); }
     @media(max-width:650px) { .player,.screen { min-height:570px; } .split { grid-template-columns:1fr; } .controls { gap:.5rem; } .control { padding:.6rem .75rem; } }
   </style>
@@ -76,7 +78,11 @@
   <main>
     <div class="eyebrow">School projects · Electronică</div>
     <h1>Joncțiunea p–n</h1>
-    <p class="sub">O prezentare interactivă despre formarea joncțiunii, zona de epuizare și polarizarea diodei. Folosește comenzile sau tastele săgeată pentru a naviga.</p>
+    <p class="sub">Aceasta este prezentarea interactivă. Pentru jocul separat cu întrebări, apasă „Joacă jocul”. Poți descărca și prezentarea PowerPoint.</p>
+    <div class="resource-links" aria-label="Alte materiale">
+      <a class="control" href="/school-projects/joc.html">▶ Joacă jocul cu întrebări</a>
+      <a class="download" href="/assets/jonctiunea_p-n.pptx" download>Descarcă PowerPoint (.pptx)</a>
+    </div>
     <div class="progress" aria-hidden="true"><span id="progress"></span></div>
     <div class="player" id="player" aria-live="polite">
       <div class="start" id="start">
