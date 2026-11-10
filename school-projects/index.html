@@ -131,7 +131,7 @@
     const gameFeedback=document.getElementById('gameFeedback'), gameContinue=document.getElementById('gameContinue'), gameReview=document.getElementById('gameReview');
     const questions=[
       {prompt:"În materialul de tip p, care sunt purtătorii majoritari?",options:["Găurile","Electronii","Ionii donori"],answer:0,why:"În tipul p, găurile sunt purtătorii majoritari."},
-      {prompt:"Ce se întâmplă cu electronii și găurile care ajung în regiunea opusă?",options:["Se recombină","Devind ioni mobili","Rămân prinși ca purtători mobili"],answer:0,why:"Electronii și găurile se recombină lângă interfață."},
+      {prompt:"Ce se întâmplă cu electronii și găurile care ajung în regiunea opusă?",options:["Se recombină","Devin ioni mobili","Rămân prinși ca purtători mobili"],answer:0,why:"Electronii și găurile se recombină lângă interfață."},
       {prompt:"Ce rămâne în apropierea interfeței după recombinarea inițială?",options:["Ioni fixați și puțini purtători mobili","Mai mulți electroni mobili","Un al doilea strat de metal"],answer:0,why:"Așa se formează zona de epuizare, cu sarcini fixe."},
       {prompt:"În ce direcție acționează câmpul electric intern al joncțiunii?",options:["Se opune difuziei suplimentare","Accelerează difuzia fără oprire","Elimină doparea"],answer:0,why:"Câmpul intern contribuie la echilibrul joncțiunii."},
       {prompt:"Cum conectezi dioda pentru polarizare directă?",options:["P la plus, N la minus","P la minus, N la plus","Ambele regiuni la plus"],answer:0,why:"Polarizarea directă îngustează zona de epuizare și favorizează curentul."},
@@ -139,7 +139,7 @@
       {prompt:"Cum conectezi dioda pentru polarizare inversă?",options:["P la minus, N la plus","P la plus, N la minus","Ambele regiuni la minus"],answer:0,why:"Polarizarea inversă lărgește zona de epuizare."},
       {prompt:"Cum se comportă curentul invers înainte de străpungere?",options:["Rămâne foarte mic","Crește rapid","Este întotdeauna mai mare decât curentul direct"],answer:0,why:"Înainte de străpungere există doar un curent invers foarte mic."},
       {prompt:"Care sunt metodele de realizare prezentate pentru joncțiunea p–n?",options:["Difuzie, implantare ionică și epitaxie","Turnare, sudură și imprimare","Doar răcire și încălzire"],answer:0,why:"Aceste trei metode introduc sau controlează dopanții în semiconductor."},
-      {prompt:"Ce dispozitive folosesc joncțiuni p–n?",options:["Diode de redresare, LED-uri și fotodiode","Condensatoare și transformatoare בלבד","Doar rezistoare"],answer:0,why:"Prezentarea enumeră diode de redresare, LED-uri și fotodiode."}
+      {prompt:"Ce dispozitive folosesc joncțiuni p–n?",options:["Diode de redresare, LED-uri și fotodiode","Condensatoare și transformatoare","Doar rezistoare"],answer:0,why:"Prezentarea enumeră diode de redresare, LED-uri și fotodiode."}
     ];
     let index=0, started=false, gameIndex=0, score=0, lives=3, correctCount=0, missed=[], answered=false, gameActive=false;
     function show(n){
