@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Prezentare interactivă în limba română despre joncțiunea p–n.">
+  <title>Joncțiunea p–n · School projects</title>
+  <style>
+    :root { color-scheme: light; --ink:#172c3d; --muted:#617386; --accent:#146b67; --paper:#f5f7f3; --line:#dce5df; --warm:#df8c4a; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; line-height:1.55; }
+    header { display:flex; justify-content:space-between; align-items:center; padding:1rem max(6vw,1.2rem); border-bottom:1px solid var(--line); }
+    a { color:var(--accent); }
+    .brand { color:var(--ink); text-decoration:none; font-weight:800; letter-spacing:-.03em; }
+    .back { text-decoration:none; font-weight:650; }
+    main { width:min(1100px,90vw); margin:0 auto; padding:2rem 0 4rem; }
+    .eyebrow { color:var(--accent); text-transform:uppercase; letter-spacing:.15em; font-size:.75rem; font-weight:800; }
+    h1 { font-size:clamp(2rem,5vw,3.4rem); line-height:1.05; letter-spacing:-.055em; margin:.5rem 0 .6rem; }
+    .sub { color:var(--muted); max-width:720px; margin:0 0 1.5rem; }
+    .player { position:relative; min-height:530px; border-radius:22px; overflow:hidden; background:#10243a; box-shadow:0 18px 55px #163b2b18; color:#fff; }
+    .start { position:absolute; inset:0; display:grid; place-content:center; text-align:center; padding:2rem; background:radial-gradient(ellipse at 80% 30%,#214f68 0,transparent 45%),#10243a; z-index:2; }
+    .start h2 { font-size:clamp(2rem,5vw,3.6rem); line-height:1; letter-spacing:-.05em; margin:.7rem 0; }
+    .start p { max-width:550px; color:#d6e4e7; margin:.3rem auto 1.3rem; }
+    button { font:inherit; cursor:pointer; }
+    .primary,.control,.answer { border:0; border-radius:999px; font-weight:750; }
+    .primary { padding:.85rem 1.3rem; background:#55c6b1; color:#10243a; }
+    .screen { min-height:530px; display:none; padding:clamp(2rem,6vw,5rem); align-content:center; background:linear-gradient(120deg,#fff 0,#f3f7f4 65%,#e6f1ec 100%); color:var(--ink); }
+    .screen.active { display:grid; }
+    .screen h2 { font-size:clamp(1.8rem,4vw,3rem); line-height:1.1; letter-spacing:-.05em; margin:0 0 1rem; }
+    .screen p,.screen li { font-size:clamp(1rem,2.1vw,1.3rem); }
+    .lead { color:var(--muted); max-width:780px; }
+    .split { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin:1rem 0; }
+    .material { padding:1.2rem; border-radius:16px; background:#f7e5e3; }
+    .material.n { background:#dceff5; }
+    .junction { display:flex; min-height:150px; align-items:stretch; margin:1.3rem 0; text-align:center; font-size:1.2rem; font-weight:750; }
+    .junction span { display:grid; place-content:center; flex:1; }
+    .junction .p { background:#f7e5e3; }
+    .junction .n { background:#dceff5; }
+    .junction .dep { flex:0 0 18%; background:#c9e3df; color:#146b67; }
+    .callout { padding:1rem 1.2rem; border-left:5px solid #55c6b1; background:#eaf4f0; border-radius:0 12px 12px 0; max-width:850px; }
+    .polarity { display:flex; gap:1rem; align-items:center; flex-wrap:wrap; margin:1rem 0; }
+    .polarity strong { font-size:1.6rem; color:var(--warm); }
+    .video-wrap { position:relative; width:min(800px,100%); aspect-ratio:16/9; background:#10243a; border-radius:16px; overflow:hidden; }
+    .video-wrap iframe { width:100%; height:100%; border:0; }
+    .quiz { display:grid; gap:.7rem; max-width:720px; }
+    .answer { border:1px solid var(--line); border-radius:12px; text-align:left; padding:1rem 1.2rem; background:#fff; color:var(--ink); }
+    .answer:hover,.answer:focus-visible { outline:3px solid #55c6b1; }
+    .feedback { min-height:2rem; font-weight:750; color:var(--accent); }
+    .controls { display:flex; align-items:center; gap:.8rem; margin:1rem 0 0; }
+    .control { padding:.65rem 1rem; color:#fff; background:#146b67; }
+    .control:disabled { opacity:.45; cursor:not-allowed; }
+    .counter { margin-left:auto; color:var(--muted); font-variant-numeric:tabular-nums; }
+    .progress { height:5px; background:#e2eae5; }
+    .progress span { display:block; height:100%; width:0; background:#55c6b1; transition:width .2s; }
+    .download { display:inline-block; margin-top:1rem; font-weight:750; }
+    .help { font-size:.9rem; color:var(--muted); }
+    @media(max-width:650px) { .player,.screen { min-height:570px; } .split { grid-template-columns:1fr; } .controls { gap:.5rem; } .control { padding:.6rem .75rem; } }
+  </style>
+</head>
+<body>
+  <header><a class="brand" href="/">DENIS<span style="color:#df8c4a">.</span></a><a class="back" href="/">← Înapoi la pagina principală</a></header>
+  <main>
+    <div class="eyebrow">School projects · Electronică</div>
+    <h1>Joncțiunea p–n</h1>
+    <p class="sub">O prezentare interactivă despre formarea joncțiunii, zona de epuizare și polarizarea diodei. Folosește comenzile sau tastele săgeată pentru a naviga.</p>
+    <div class="progress" aria-hidden="true"><span id="progress"></span></div>
+    <div class="player" id="player" aria-live="polite">
+      <div class="start" id="start">
+        <div class="eyebrow">Prezentare interactivă · 10 slide-uri</div>
+        <h2>Joncțiunea p–n</h2>
+        <p>Începe cu butonul Play, apoi parcurge slide-urile. La final, răspunde la mini-quiz.</p>
+        <button class="primary" id="play">▶ Play / Începe</button>
+      </div>
+      <section class="screen" data-title="Joncțiunea p–n"><div class="eyebrow">Semiconductori</div><h2>Joncțiunea p–n</h2><p class="lead">Cum se formează și cum controlează curentul electric</p><div class="junction"><span class="p">P<br>găuri</span><span class="dep">interfață</span><span class="n">N<br>electroni</span></div><p class="callout">O interfață între două regiuni dopate stă la baza diodei semiconductoare.</p></section>
+      <section class="screen" data-title="Regiunile p și n"><h2>Două regiuni, purtători diferiți</h2><div class="split"><div class="material"><h3>Tip p</h3><p>Găurile sunt purtătorii majoritari. Doparea creează un deficit relativ de electroni.</p></div><div class="material n"><h3>Tip n</h3><p>Electronii sunt purtătorii majoritari. Doparea aduce atomi donori în cristal.</p></div></div><p class="lead">Găurile reprezintă locuri vacante în rețeaua cristalină, nu particule pozitive materiale.</p></section>
+      <section class="screen" data-title="Difuzia purtătorilor"><h2>La contact, purtătorii se difuzează</h2><p class="lead">Electronii din N și găurile din P tind să treacă spre regiunea opusă și se recombină în apropierea interfeței.</p><div class="junction"><span class="p">P<br>h⁺ →</span><span class="dep">recombinare</span><span class="n">← e⁻<br>N</span></div><p class="callout">În urmă rămân ioni fixați. Zona din apropierea joncțiunii pierde purtătorii mobili.</p></section>
+      <section class="screen" data-title="Zona de epuizare"><h2>Echilibrul creează o barieră internă</h2><p class="lead">Regiunea de epuizare conține puțini purtători mobili. Sarcinile fixe creează un câmp electric care se opune difuziei suplimentare.</p><div class="junction"><span class="p">P</span><span class="dep">− − − │ + + +<br>zona de epuizare</span><span class="n">N</span></div><p class="callout">Fără tensiune externă, difuzia și curentul produs de câmp se echilibrează.</p></section>
+      <section class="screen" data-title="Polarizare directă"><h2>Polarizarea directă favorizează curentul</h2><div class="polarity"><span>Conectare:</span><strong>P la +</strong><span>și</span><strong>N la −</strong></div><div class="junction"><span class="p">P · găuri →</span><span class="dep">barieră mai îngustă</span><span class="n">← electroni · N</span></div><p class="callout">Purtătorii sunt împinși spre joncțiune. Bariera scade, iar curentul poate crește mult.</p></section>
+      <section class="screen" data-title="Polarizare inversă"><h2>Polarizarea inversă limitează curentul</h2><div class="polarity"><span>Conectare:</span><strong>P la −</strong><span>și</span><strong>N la +</strong></div><div class="junction"><span class="p">P</span><span class="dep">zonă mai lată</span><span class="n">N</span></div><p class="callout">Curentul rămâne foarte mic până la străpungere. Curentul invers excesiv poate deteriora o diodă obișnuită.</p></section>
+      <section class="screen" data-title="Caracteristica diodei"><h2>Dioda conduce diferit în cele două sensuri</h2><div class="split"><div class="material n"><h3>Polarizare directă</h3><p>După depășirea barierei, curentul crește rapid odată cu tensiunea.</p></div><div class="material"><h3>Polarizare inversă</h3><p>Curge doar un curent mic de fugă, până la regiunea de străpungere.</p></div></div><p class="callout">Caracteristica I–V este asimetrică. Valoarea exactă depinde de tipul diodei și de condițiile de funcționare.</p></section>
+      <section class="screen" data-title="Fabricație și aplicații"><h2>Joncțiunea stă la baza mai multor componente</h2><ul><li><b>Realizare:</b> difuzie, implantare ionică sau epitaxie.</li><li><b>Redresare:</b> diodele permit curentul în regim direct.</li><li><b>Lumină:</b> LED-urile emit lumină, iar fotodiodele detectează lumina.</li></ul><p class="callout">Dopajul și geometria joncțiunii determină comportarea dispozitivului.</p></section>
+      <section class="screen" data-title="Clip video"><h2>Urmărește animația</h2><p class="lead">Clipul arată formarea joncțiunii și zona de epuizare. Audio este în engleză.</p><div class="video-wrap"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/btOIDQeMrMg?rel=0" title="How does a diode work - the PN Junction (with animation)" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div><p class="help">Dacă playerul nu se încarcă, <a href="https://www.youtube.com/watch?v=btOIDQeMrMg" target="_blank" rel="noopener">deschide clipul pe YouTube</a>.</p></section>
+      <section class="screen" data-title="Mini-quiz"><h2>Mini-quiz: polarizarea directă</h2><p class="lead">Cum conectăm sursa ca dioda să conducă în regim direct?</p><div class="quiz"><button class="answer" data-correct="false">A. P la minus și N la plus</button><button class="answer" data-correct="true">B. P la plus și N la minus</button><button class="answer" data-correct="false">C. Ambele regiuni la plus</button></div><p class="feedback" id="feedback" role="status"></p><p class="help">Răspunsul se verifică imediat. Poți reveni la explicațiile despre polarizare cu butonul Înapoi.</p><a class="download" href="/assets/jonctiunea_p-n.pptx" download>Descarcă prezentarea PowerPoint (.pptx)</a></section>
+    </div>
+    <nav class="controls" aria-label="Navigare prezentare"><button class="control" id="prev" disabled>← Înapoi</button><button class="control" id="next" disabled>Înainte →</button><span class="counter" id="counter">Apasă Play ca să începi</span></nav>
+    <p class="help">Comenzi rapide: ← și → pentru navigare, Home pentru primul slide, End pentru quiz.</p>
+  </main>
+  <script>
+    const pages=[...document.querySelectorAll('.screen')], start=document.getElementById('start');
+    const prev=document.getElementById('prev'), next=document.getElementById('next'), counter=document.getElementById('counter'), progress=document.getElementById('progress');
+    let index=0, started=false;
+    function show(n){ index=Math.max(0,Math.min(pages.length-1,n)); pages.forEach((p,i)=>p.classList.toggle('active',i===index)); counter.textContent=`${index+1} / ${pages.length} · ${pages[index].dataset.title}`; prev.disabled=index===0; next.disabled=index===pages.length-1; progress.style.width=`${(index+1)/pages.length*100}%`; }
+    function begin(){started=true; start.hidden=true; show(0); prev.disabled=false;}
+    document.getElementById('play').addEventListener('click',begin);
+    prev.addEventListener('click',()=>show(index-1)); next.addEventListener('click',()=>show(index+1));
+    document.addEventListener('keydown',e=>{if(!started)return;if(e.key==='ArrowRight')show(index+1);if(e.key==='ArrowLeft')show(index-1);if(e.key==='Home')show(0);if(e.key==='End')show(pages.length-1);});
+    document.querySelectorAll('.answer').forEach(b=>b.addEventListener('click',()=>{const ok=b.dataset.correct==='true';document.getElementById('feedback').textContent=ok?'Corect! În polarizare directă, P se conectează la plus, iar N la minus.':'Încearcă din nou. Pentru polarizare directă, P se conectează la plus, iar N la minus.';document.getElementById('feedback').style.color=ok?'#146b67':'#9b3c32';}));
+  </script>
+</body>
+</html>
+
